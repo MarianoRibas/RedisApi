@@ -15,7 +15,7 @@ def push_item(item):
 
 def pop_item ():
     poppedItem = r.lpop('queue:messages')
-    return str(poppedItem)
+    return poppedItem
 
 def queue_size():
     return str(r.llen('queue:messages'))
@@ -24,13 +24,17 @@ def queue_size():
 
 @app.route('/api/queue/push', methods=['POST'])
 def push_route():
-    body = json.dumps(request.form)
-    return push_item(body.msg)
+    
+    hasMsgKey = 'msg' in request.json
+    if not hasMsgKey:
+        return 'Invalid Request' , 400
+    message = str(request.json['msg'])
+    return push_item(message) , 201
 
-@app.route('/api/queue/pop')
+@app.route('/api/queue/pop', methods=['POST'])
 def pop_route():
 
-    return pop_item()
+    return pop_item(), 200
 
 @app.route('/api/queue/size')
 def size_route():
