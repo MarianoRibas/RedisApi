@@ -1,6 +1,7 @@
 from flask import Flask, request
 import redis
 import json
+import logging
 
 r = redis.Redis(host='localhost', port=6379)
 app = Flask (__name__)
@@ -9,7 +10,7 @@ def push_item(item):
     data = {
         'msg' : item
     }
-    r.rpush('queue:messages','Hola')
+    r.rpush('queue:messages',str(data))
     return "OK"
 
 def pop_item ():
@@ -21,10 +22,10 @@ def queue_size():
 
 
 
-@app.route('/api/queue/push')
+@app.route('/api/queue/push', methods=['POST'])
 def push_route():
-
-    return push_item('HOLA')
+    body = json.dumps(request.form)
+    return push_item(body.msg)
 
 @app.route('/api/queue/pop')
 def pop_route():
@@ -35,6 +36,11 @@ def pop_route():
 def size_route():
 
     return queue_size()
+
+@app.route('/demo', methods=['POST'])
+def demo ():
+    
+    return request.form
 
 
 if __name__ == '__main__':
