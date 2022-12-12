@@ -5,7 +5,7 @@ routes_health_check = Blueprint("routes_health_check",__name__)
 
 @routes_health_check.before_request
 def auth_middleware():
-    verify_token_middleware()
+    return verify_token_middleware()
 
 @routes_health_check.route('/healthCheck', methods=['POST'])
 def health_check_route():

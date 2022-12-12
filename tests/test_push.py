@@ -1,5 +1,4 @@
 from conftest import client
-from authentication import test_authentication
 import os
 from dotenv import load_dotenv
 
@@ -12,7 +11,7 @@ def test_push(client):
     token = token.json['token']
 
     # Request authentication
-    test_authentication(client, 'push')
+    #test_authentication(client, 'push')
 
     #Request with no message
     response = client.post('/api/queue/push' , headers={"Authorization" : f"Bearer {token}"})
