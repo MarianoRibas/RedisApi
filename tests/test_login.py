@@ -36,6 +36,7 @@ def test_login_endpoint(client):
         decoded = jwt.decode(token,"MySecretKey", algorithms=['HS256'])
         assert decoded['user'] == 'testUser1'
 
+
     #Request with invalid credentials
     response = client.post("/api/queue/login", json={
         "user":"1",
@@ -43,3 +44,11 @@ def test_login_endpoint(client):
     })
 
     assert response.status_code == 401
+    assert response.json["message"] == 'Invalid credentials'
+
+
+    #Request with no credentials
+    response = client.post("/api/queue/login", )
+    
+    assert response.status_code == 400
+    assert response.json == None

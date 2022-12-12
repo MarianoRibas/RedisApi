@@ -56,13 +56,13 @@ def login (credentials):
     hasPassword = 'password' in credentials
 
     if not hasUsername or not hasPassword:
-        return 'Must provide credentials' , 400
+        return {"message": "Must provide credentials"} , 400
 
     username = credentials['user']
     password = credentials['password']
 
     if not authenticate(username,password):
-        return 'Invalid Credentials' , 401
+        return {"message": "Invalid credentials"} , 401
 
     user_info = {"user" : username, "exp" : expire_time(30) }
     token = jwt.encode(user_info, secretKey, algorithm='HS256')
