@@ -1,7 +1,11 @@
 from flask import Blueprint, request
-from controllers import push_item
+from controllers import push_item, verify_token_middleware
 
 routes_push = Blueprint("routes_push",__name__)
+
+@routes_push.before_request
+def auth_middleware():
+    verify_token_middleware()
 
 @routes_push.route("/push", methods = ['POST'])
 def push_route():

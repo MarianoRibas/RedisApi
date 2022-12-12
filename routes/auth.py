@@ -10,4 +10,4 @@ def login_route():
 @routes_auth.route("/checkToken", methods=['POST'])
 def checkToken_route():
     token = request.headers['Authorization'].split(" ")[1]
-    return verify_token(token)
+    return verify_token(token, output = True)
