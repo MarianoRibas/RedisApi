@@ -24,7 +24,6 @@ def queue_size():
 
 @app.route('/api/queue/push', methods=['POST'])
 def push_route():
-    
     hasMsgKey = 'msg' in request.json
     if not hasMsgKey:
         return 'Invalid Request' , 400
@@ -33,10 +32,13 @@ def push_route():
 
 @app.route('/api/queue/pop', methods=['POST'])
 def pop_route():
+    poppedItem = pop_item()
+    if poppedItem == None:
+        return 'No items to pop' , 400
+    print(poppedItem)
+    return 'OK', 200
 
-    return pop_item(), 200
-
-@app.route('/api/queue/size')
+@app.route('/api/queue/size', methods=['POST'])
 def size_route():
 
     return queue_size()
