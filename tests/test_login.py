@@ -1,31 +1,10 @@
-import pytest
 import jwt
-import json
-from app import create_app
-
-@pytest.fixture()
-def app():
-    app = create_app()
-    app.config.update({
-        "TESTING": True,
-    })
-
-    yield app
-
-@pytest.fixture()
-def client(app):
-    return app.test_client()
-
-
-@pytest.fixture()
-def runner(app):
-    return app.test_cli_runner()
-
+from conftest import validUsername, validPassword, secretKey
 def test_login_endpoint(client):
     # Request with correct credentials
     response = client.post("/api/queue/login", json={
-        "user":"testUser1",
-        "password":"1234"
+        "user" : validUsername,
+        "password" : validPassword
     })
     
     assert response.status_code == 200
@@ -33,8 +12,8 @@ def test_login_endpoint(client):
     
     if response.status_code == 200:
         token = response.json['token']
-        decoded = jwt.decode(token,"MySecretKey", algorithms=['HS256'])
-        assert decoded['user'] == 'testUser1'
+        decoded = jwt.decode(token,secretKey, algorithms=['HS256'])
+        assert decoded['user'] == validUsername
 
 
     #Request with invalid credentials
@@ -47,8 +26,14 @@ def test_login_endpoint(client):
     assert response.json["message"] == 'Invalid credentials'
 
 
+    #Request with missing credentials
+    response = client.post("/api/queue/login", json={"user" : "testUser1"})
+    
+    assert response.status_code == 400
+    assert response.json['message'] == 'Must provide credentials'
+
     #Request with no credentials
-    response = client.post("/api/queue/login", )
+    response = client.post("/api/queue/login")
     
     assert response.status_code == 400
     assert response.json == None

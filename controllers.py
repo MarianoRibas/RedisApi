@@ -69,19 +69,26 @@ def login (credentials):
 
     return {'token' : token} , 200
 
+
+
 def verify_token (token, output = False):
     try:
         if output:
             return jwt.decode(token,secretKey, algorithms=['HS256']) , 200
         jwt.decode(token,secretKey, algorithms=['HS256']) , 200
     except jwt.DecodeError:
-        return {"msg" : "Invalid Token"} , 401
+        return "Invalid Token" , 401
+        
     except jwt.ExpiredSignatureError:
         return jsonify({"msg" : "Expired Token"}) , 401
 
+
+
 def verify_token_middleware():
     hasToken = 'Authorization' in request.headers
-    if not hasToken:
+    print(hasToken)
+    if hasToken == False:
         return 'Must Provide a Token!' , 401
     token = request.headers['Authorization'].split(" ")[1]
-    verify_token(token, output=False)
+    print(token)
+    return verify_token(token, output=False)
