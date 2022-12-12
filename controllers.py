@@ -1,3 +1,4 @@
+from flask import jsonify
 import redis
 import jwt
 import os
@@ -62,8 +63,15 @@ def login (credentials):
     if not authenticate(username,password):
         return 'Invalid Credentials' , 401
 
-    user_info = {"user" : username, "exp" : expire_time(3) }
+    user_info = {"user" : username, "exp" : expire_time(5) }
     token = jwt.encode(user_info, secretKey, algorithm='HS256')
 
     return {'token' : token} , 200
 
+def verify_token (token):
+    try:
+        return jwt.decode(token,secretKey, algorithms=['HS256']) , 200
+    except jwt.DecodeError:
+        return {"msg" : "Invalid Token"} , 401
+    except jwt.ExpiredSignatureError:
+        return jsonify({"msg" : "Expired Token"}) , 401
