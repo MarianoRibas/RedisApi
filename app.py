@@ -20,6 +20,12 @@ def pop_item ():
 def queue_size():
     return str(r.llen('queue:messages'))
 
+def health_check():
+    health = r.ping()
+    print(health)
+    if  not health:
+        return 'Redis database is unhealthy'
+    return 'Redis database is healthy'
 
 
 @app.route('/api/queue/push', methods=['POST'])
@@ -35,18 +41,17 @@ def pop_route():
     poppedItem = pop_item()
     if poppedItem == None:
         return 'No items to pop' , 400
-    print(poppedItem)
-    return 'OK', 200
+    
+    return poppedItem, 200
 
 @app.route('/api/queue/size', methods=['POST'])
 def size_route():
-
     return queue_size()
 
-@app.route('/demo', methods=['POST'])
-def demo ():
-    
-    return request.form
+@app.route('/healthCheck', methods=['POST'])
+def health_check_route():
+    health = health_check()
+    return health, 200
 
 
 if __name__ == '__main__':
