@@ -1,57 +1,14 @@
-from flask import Flask, request
-import redis
-import json
-import logging
+from flask import Flask
+from routes import login , push , pop, size, healthCheck
+import controllers
 
-r = redis.Redis(host='localhost', port=6379)
 app = Flask (__name__)
 
-def push_item(item):
-    data = {
-        'msg' : item
-    }
-    r.rpush('queue:messages',str(data))
-    return "OK"
-
-def pop_item ():
-    poppedItem = r.lpop('queue:messages')
-    return poppedItem
-
-def queue_size():
-    return str(r.llen('queue:messages'))
-
-def health_check():
-    health = r.ping()
-    print(health)
-    if  not health:
-        return 'Redis database is unhealthy'
-    return 'Redis database is healthy'
-
-
-@app.route('/api/queue/push', methods=['POST'])
-def push_route():
-    hasMsgKey = 'msg' in request.json
-    if not hasMsgKey:
-        return 'Invalid Request' , 400
-    message = str(request.json['msg'])
-    return push_item(message) , 201
-
-@app.route('/api/queue/pop', methods=['POST'])
-def pop_route():
-    poppedItem = pop_item()
-    if poppedItem == None:
-        return 'No items to pop' , 400
-    
-    return poppedItem, 200
-
-@app.route('/api/queue/size', methods=['POST'])
-def size_route():
-    return queue_size()
-
-@app.route('/healthCheck', methods=['POST'])
-def health_check_route():
-    health = health_check()
-    return health, 200
+app.register_blueprint(login.routes_auth, url_prefix='/api/queue')
+app.register_blueprint(push.routes_push, url_prefix='/api/queue')
+app.register_blueprint(pop.routes_pop, url_prefix='/api/queue')
+app.register_blueprint(size.routes_size, url_prefix='/api/queue')
+app.register_blueprint(healthCheck.routes_health_check, url_prefix='/api/queue')
 
 
 if __name__ == '__main__':
