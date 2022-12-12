@@ -15,11 +15,8 @@ validPassword = os.getenv("PASSWORD")
 
 
 def push_item(item):
-    data = {
-        'msg' : item
-    }
-    r.rpush('queue:messages',str(data))
-    return "OK"
+    r.rpush('queue:messages',str(item))
+    return jsonify({"status": "ok"})
 
 
 def pop_item ():
@@ -27,8 +24,12 @@ def pop_item ():
     return poppedItem
 
 
-def queue_size():
-    return str(r.llen('queue:messages'))
+def queue_count():
+    response = jsonify({
+        'status' : 'ok',
+        'count' : str(r.llen('queue:messages'))
+    })
+    return response
 
 
 def health_check():
@@ -63,7 +64,7 @@ def login (credentials):
     if not authenticate(username,password):
         return 'Invalid Credentials' , 401
 
-    user_info = {"user" : username, "exp" : expire_time(5) }
+    user_info = {"user" : username, "exp" : expire_time(30) }
     token = jwt.encode(user_info, secretKey, algorithm='HS256')
 
     return {'token' : token} , 200

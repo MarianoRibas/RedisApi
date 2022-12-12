@@ -1,17 +1,20 @@
 from flask import Flask
-from routes import auth , push , pop, size, healthCheck
+from routes import auth, count , push , pop, healthCheck
 import controllers
 
-app = Flask (__name__)
+def create_app():
+    app = Flask (__name__)
 
-PREFIX = "/api/queue"
+    URL_PREFIX = "/api/queue"
 
-app.register_blueprint(auth.routes_auth, url_prefix=PREFIX)
-app.register_blueprint(push.routes_push, url_prefix=PREFIX)
-app.register_blueprint(pop.routes_pop, url_prefix=PREFIX)
-app.register_blueprint(size.routes_size, url_prefix=PREFIX)
-app.register_blueprint(healthCheck.routes_health_check, url_prefix=PREFIX)
+    app.register_blueprint(auth.routes_auth, url_prefix=URL_PREFIX)
+    app.register_blueprint(push.routes_push, url_prefix=URL_PREFIX)
+    app.register_blueprint(pop.routes_pop, url_prefix=URL_PREFIX)
+    app.register_blueprint(count.routes_count, url_prefix=URL_PREFIX)
+    app.register_blueprint(healthCheck.routes_health_check, url_prefix=URL_PREFIX)
+    
+    return app
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+#if __name__ == '__main__':
+#   app.run(debug=True)
