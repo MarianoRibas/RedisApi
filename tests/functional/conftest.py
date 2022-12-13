@@ -14,7 +14,7 @@ def app():
         "TESTING": True,
     })
 
-    yield app
+    return app
 
 @pytest.fixture()
 def client(app):

@@ -1,4 +1,5 @@
 from conftest import client
+import pytest
 import os
 from dotenv import load_dotenv
 
@@ -6,12 +7,10 @@ secretKey = os.getenv("SECRETKEY")
 validUsername = os.getenv("USERNAME")
 validPassword = os.getenv("PASSWORD")
 
+#@pytest.mark.parametrize
 def test_push(client):
     token = client.post('api/queue/login', json = {"user" : validUsername , "password" : validPassword})
     token = token.json['token']
-
-    # Request authentication
-    #test_authentication(client, 'push')
 
     #Request with no message
     response = client.post('/api/queue/push' , headers={"Authorization" : f"Bearer {token}"})

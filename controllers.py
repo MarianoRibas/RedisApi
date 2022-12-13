@@ -1,30 +1,31 @@
-from flask import jsonify, request
-import redis
+from flask import jsonify, request, make_response
 import jwt
 import os
 from dotenv import load_dotenv
 import datetime
-
+import redis
 
 r = redis.Redis(host='localhost', port=6379)
-load_dotenv()
 
+
+
+load_dotenv()
 secretKey = os.getenv("SECRETKEY")
 validUsername = os.getenv("USERNAME")
 validPassword = os.getenv("PASSWORD")
 
 
-def push_item(item):
+def push_item(item, r = r):
     r.rpush('queue:messages',str(item))
-    return jsonify({"status": "ok"})
+    return {"status": "ok"}
 
 
-def pop_item ():
+def pop_item (r = r):
     poppedItem = r.lpop('queue:messages')
     return poppedItem
 
 
-def queue_count():
+def queue_count(r):
     response = jsonify({
         'status' : 'ok',
         'count' : str(r.llen('queue:messages'))
@@ -32,7 +33,7 @@ def queue_count():
     return response
 
 
-def health_check():
+def health_check(r):
     health = r.ping()
     if  not health:
         return 'Redis database is unhealthy'
