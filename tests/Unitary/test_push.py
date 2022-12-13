@@ -1,6 +1,5 @@
 from fakeredis import FakeStrictRedis
 import pytest
-import json
 from controllers import push_item
 from app import create_app
 
