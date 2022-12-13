@@ -9,4 +9,4 @@ def auth_middleware():
 
 @routes_count.route('/count', methods=['POST'])
 def count_route():
-    return queue_count()
+    return queue_count() , 200
