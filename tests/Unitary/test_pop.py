@@ -1,15 +1,6 @@
 from fakeredis import FakeStrictRedis
 import pytest
 from controllers import pop_item
-from app import create_app
-
-@pytest.fixture(scope='module')
-def test_client():
-    flask_app = create_app()
-    context = flask_app.app_context()
-    context.push()
-    
-    return flask_app
 
 @pytest.mark.parametrize('message, expected_result',[
     ('Test1','Test1'),

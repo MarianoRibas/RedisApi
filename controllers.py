@@ -25,11 +25,11 @@ def pop_item (r = r):
     return poppedItem
 
 
-def queue_count(r):
-    response = jsonify({
+def queue_count(r = r):
+    response = {
         'status' : 'ok',
-        'count' : str(r.llen('queue:messages'))
-    })
+        'count' : r.llen('queue:messages')
+    }
     return response
 
 
