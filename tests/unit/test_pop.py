@@ -1,16 +1,14 @@
+from pytest_mock import mocker
 from fakeredis import FakeStrictRedis
-import pytest
-from controllers import pop_item
+from services.services import pop_item
 
-@pytest.mark.parametrize('message, expected_result',[
-    ('Test1','Test1'),
-    ('Test2','Test2'),
-])
-def test_pop(message, expected_result):
+def test_pop(mocker):
     fake_redis = FakeStrictRedis()
-    fake_redis.lpush('queue:messages',message)
+    mocked_redis = mocker.Mock(spec = fake_redis)
+    mocked_redis.lpop.return_value = 'Test-message'
+    result = pop_item(r = mocked_redis)
 
-    result = pop_item(r = fake_redis)
+    assert result == 'Test-message'
 
-    assert result.decode('utf-8') == expected_result
+    
 
