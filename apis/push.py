@@ -14,4 +14,6 @@ def push_route():
     if not hasMsgKey:
         return 'Invalid Request' , 400
     message = str(request.json['msg'])
-    return push_item(message) , 201
+    result = push_item(message)
+    if result:
+        return {'status' : 'ok'} , 201

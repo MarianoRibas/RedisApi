@@ -17,8 +17,9 @@ validPassword = os.getenv("PASSWORD")
 
 def push_item(item, r = r):
     try:
-        r.rpush('queue:messages',str(item))
-        return {"status": "ok"}
+        result = r.rpush('queue:messages',str(item))
+        return result
+        
     except:
         return 'Connection error'
 

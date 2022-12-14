@@ -1,19 +1,17 @@
+from pytest_mock import mocker
 from fakeredis import FakeStrictRedis
 import pytest
+from redis import Redis
 from services.services import push_item
 
 
 
-@pytest.mark.parametrize('message, expected_result',[
-    ('Test msg 1','Test msg 1'),
-    (1,'1'),
-    ([],'[]'),
-])   
-def test_push_ok(message, expected_result):
-    fake_redis = FakeStrictRedis()
-    result = push_item(message, fake_redis)
-    pushedItem = fake_redis.lpop('queue:messages')
+def test_push_ok(mocker):
 
-    assert result['status'] == 'ok'
-    assert pushedItem.decode('utf-8') == expected_result
+    mocked_redis = mocker.Mock(spec = Redis())
+    mocked_redis.rpush.return_value = 1
+    result = push_item('Test-message', mocked_redis)
+
+    assert result == 1
+    
     
