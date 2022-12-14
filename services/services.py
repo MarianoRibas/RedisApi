@@ -34,11 +34,8 @@ def pop_item (r = r):
 
 def queue_count(r = r):
     try:
-        response = {
-            'status' : 'ok',
-            'count' : r.llen('queue:messages')
-        }
-        return response
+        queueCount = r.llen('queue:messages')
+        return queueCount
     except:
         'Connection error'
 
