@@ -16,29 +16,41 @@ validPassword = os.getenv("PASSWORD")
 
 
 def push_item(item, r = r):
-    r.rpush('queue:messages',str(item))
-    return {"status": "ok"}
+    try:
+        r.rpush('queue:messages',str(item))
+        return {"status": "ok"}
+    except:
+        return 'Connection error'
 
 
 def pop_item (r = r):
-    poppedItem = r.lpop('queue:messages')
-    return poppedItem
+    try:
+        poppedItem = r.lpop('queue:messages')
+        return poppedItem
+    except:
+        return 'Connection error'
 
 
 def queue_count(r = r):
-    response = {
-        'status' : 'ok',
-        'count' : r.llen('queue:messages')
-    }
-    return response
+    try:
+        response = {
+            'status' : 'ok',
+            'count' : r.llen('queue:messages')
+        }
+        return response
+    except:
+        'Connection error'
 
 
-def health_check(r):
-    health = r.ping()
-    if  not health:
-        return 'Redis database is unhealthy'
-    else:
-        return 'Redis database is healthy'
+def health_check(r = r):
+    try:
+        health = r.ping()
+        if  not health:
+            return 'Redis database is unhealthy'
+        else:
+            return 'Redis database is healthy'
+    except:
+        return 'Connection error'
 
 
 
