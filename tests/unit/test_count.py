@@ -1,6 +1,6 @@
 import pytest
 from fakeredis import FakeStrictRedis
-from controllers import queue_count
+from services.services import queue_count
 
 @pytest.mark.parametrize('message, expected_result',[
     ('Test1','Test1'),

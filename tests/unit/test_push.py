@@ -1,6 +1,6 @@
 from fakeredis import FakeStrictRedis
 import pytest
-from controllers import push_item
+from services.services import push_item
 
 
 
@@ -11,7 +11,7 @@ from controllers import push_item
 ])   
 def test_push_ok(message, expected_result):
     fake_redis = FakeStrictRedis()
-    result = push_item(message,r = fake_redis)
+    result = push_item(message, fake_redis)
     pushedItem = fake_redis.lpop('queue:messages')
 
     assert result['status'] == 'ok'

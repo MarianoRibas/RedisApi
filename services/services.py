@@ -1,4 +1,4 @@
-from flask import jsonify, request, make_response
+from flask import jsonify, request
 import jwt
 import os
 from dotenv import load_dotenv

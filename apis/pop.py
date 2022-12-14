@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 import json
-from controllers import pop_item, verify_token_middleware, verify_token
+from services.services import pop_item, verify_token_middleware, verify_token
 
 routes_pop = Blueprint("routes_pop",__name__)
 

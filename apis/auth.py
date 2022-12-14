@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from controllers import login, verify_token
+from services.services import login, verify_token
 
 routes_auth = Blueprint("routes_auth",__name__)
 

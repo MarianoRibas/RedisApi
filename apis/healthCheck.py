@@ -1,5 +1,5 @@
 from flask import Blueprint
-from controllers import health_check, verify_token_middleware
+from services.services import health_check, verify_token_middleware
 
 routes_health_check = Blueprint("routes_health_check",__name__)
 

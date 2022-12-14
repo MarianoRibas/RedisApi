@@ -1,6 +1,6 @@
 import pytest
 import fakeredis 
-from controllers import health_check
+from services.services import health_check
 
 def test_health_check ():
     server = fakeredis.FakeServer()

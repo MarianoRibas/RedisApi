@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from controllers import queue_count , verify_token_middleware
+from services.services import queue_count , verify_token_middleware
 
 routes_count = Blueprint("routes_count",__name__)
 
