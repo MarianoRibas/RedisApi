@@ -5,7 +5,7 @@ routes_push = Blueprint("routes_push",__name__)
 
 @routes_push.before_request
 def auth_middleware():
-    return verify_token_middleware()
+    return verify_token_middleware(request.headers)
     
 
 @routes_push.route("/push", methods = ['POST'])

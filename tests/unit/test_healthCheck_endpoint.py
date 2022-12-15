@@ -1,27 +1,19 @@
+import pytest
 from pytest_mock import mocker
 from services.services import health_check
 from conftest import client
 
-def test_healthCheck_endpoint_healthy(client, mocker):
-    mocker.patch('apis.healthCheck.health_check', return_value = 'Redis database is healthy')
+@pytest.mark.parametrize('healthValue, expectedResult',[
+    ('Redis database is healthy','Redis database is healthy'),
+    ('Redis database is unhealthy','Redis database is unhealthy')
+])
+def test_healthCheck_endpoint(client, mocker, healthValue, expectedResult):
+    mocker.patch('apis.healthCheck.health_check', return_value = healthValue)
     mocker.patch('apis.healthCheck.verify_token_middleware', return_value = None )
     
     result = client.post('/api/queue/healthCheck')
     assert result.status_code == 200
-    assert result.json['message'] == 'Redis database is healthy'
+    assert result.json['message'] == expectedResult
 
-def test_healthCheck_endpoint_unhealthy(client, mocker):
-    mocker.patch('apis.healthCheck.health_check', return_value = 'Redis database is unhealthy')
-    mocker.patch('apis.healthCheck.verify_token_middleware', return_value = None )
-    
-    result = client.post('/api/queue/healthCheck')
-    assert result.status_code == 200
-    assert result.json['message'] == 'Redis database is unhealthy'
 
-def test_healthCheck_endpoint_exception(client, mocker):
-    mocker.patch('apis.healthCheck.health_check', return_value = 'Connection error')
-    mocker.patch('apis.healthCheck.verify_token_middleware', return_value = None )
-    
-    result = client.post('/api/queue/healthCheck')
-    assert result.status_code == 500
-    assert result.json['message'] == 'Connection error'
+

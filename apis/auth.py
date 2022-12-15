@@ -7,9 +7,14 @@ routes_auth = Blueprint("routes_auth",__name__)
 def login_route():
     if request.json == None:
         return {"message":"Must provide credentials"} , 400
-    return login(request.json)
+    
+    result = login(request.json)
+    if 'token' in result:
+        return result, 200
+    else:
+        return result, 401
 
-@routes_auth.route("/checkToken", methods=['POST'])
-def checkToken_route():
-    token = request.headers['Authorization'].split(" ")[1]
-    return verify_token(token, output = True)
+# @routes_auth.route("/checkToken", methods=['POST'])
+# def checkToken_route():
+#     token = request.headers['Authorization'].split(" ")[1]
+#     return verify_token(token, output = True)

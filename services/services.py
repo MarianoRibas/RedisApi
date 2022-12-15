@@ -27,8 +27,9 @@ def push_item(item, r = r):
 def pop_item(r = r):
     try:
         poppedItem = r.lpop('queue:messages')
-        poppedItem.decode('utf-8')
-        return poppedItem
+        #poppedItem.decode('utf-8')
+        print('popped----------------------',poppedItem)
+        return str(poppedItem)
     except:
         return 'Connection error'
 
@@ -54,6 +55,8 @@ def health_check(r = r):
 
 
 def authenticate(user, password):
+    validUsername = os.getenv("USERNAME")
+    validPassword = os.getenv("PASSWORD")
     if user == validUsername and password == validPassword:
         return True
     else:
@@ -68,26 +71,26 @@ def login (credentials):
     hasPassword = 'password' in credentials
 
     if not hasUsername or not hasPassword:
-        return {"message": "Must provide credentials"} , 400
+        return {"message": "Must provide credentials"} 
 
     username = credentials['user']
     password = credentials['password']
 
     if not authenticate(username,password):
-        return {"message": "Invalid credentials"} , 401
+        return {"message": "Invalid credentials"}
 
     user_info = {"user" : username, "exp" : expire_time(30) }
     token = jwt.encode(user_info, secretKey, algorithm='HS256')
 
-    return {'token' : token} , 200
+    return {'token' : token} 
 
 
 
-def verify_token (token, output = False):
+def verify_token (token):
     try:
-        if output:
-            return jwt.decode(token,secretKey, algorithms=['HS256']) , 200
-        jwt.decode(token,secretKey, algorithms=['HS256']) , 200
+        # if output:
+        #     return jwt.decode(token,secretKey, algorithms=['HS256']) , 200
+        jwt.decode(token,secretKey, algorithms=['HS256'])
     except jwt.DecodeError:
         return "Invalid Token" , 401
         
@@ -96,11 +99,9 @@ def verify_token (token, output = False):
 
 
 
-def verify_token_middleware():
-    hasToken = 'Authorization' in request.headers
-    print(hasToken)
+def verify_token_middleware(headers):
+    hasToken = 'Authorization' in headers
     if hasToken == False:
         return 'Must Provide a Token!' , 401
-    token = request.headers['Authorization'].split(" ")[1]
-    print(token)
-    return verify_token(token, output=False)
+    token = headers['Authorization'].split(" ")[1]
+    return verify_token(token)
