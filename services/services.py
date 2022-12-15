@@ -24,9 +24,10 @@ def push_item(item, r = r):
         return 'Connection error'
 
 
-def pop_item (r = r):
+def pop_item(r = r):
     try:
         poppedItem = r.lpop('queue:messages')
+        poppedItem.decode('utf-8')
         return poppedItem
     except:
         return 'Connection error'

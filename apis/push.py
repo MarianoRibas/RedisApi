@@ -16,4 +16,4 @@ def push_route():
     message = str(request.json['msg'])
     result = push_item(message)
     if result:
-        return {'status' : 'ok'} , 201
+        return {'status' : 'ok', 'order' : str(result)} , 201
