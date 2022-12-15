@@ -10,4 +10,4 @@ def auth_middleware():
 @routes_health_check.route('/healthCheck', methods=['POST'])
 def health_check_route():
     health = health_check()
-    return health, 200
+    return {'message' : health} , 200
