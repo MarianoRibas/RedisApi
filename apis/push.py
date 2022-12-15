@@ -10,10 +10,15 @@ def auth_middleware():
 
 @routes_push.route("/push", methods = ['POST'])
 def push_route():
+
     hasMsgKey = 'msg' in request.json
     if not hasMsgKey:
         return {'status' : 'Must provide a message' }, 400
-    message = str(request.json['msg'])
-    result = push_item(message)
-    if result:
-        return {'status' : 'ok', 'order' : str(result)} , 201
+    try:
+        message = str(request.json['msg'])
+        result = push_item(message)
+        if result == 'Connection error':
+            return {'status' : 'error' , 'message' : result} , 500
+        return {'status' : 'ok'} , 201
+    except:
+        return {'message' : 'Internal error'} , 500

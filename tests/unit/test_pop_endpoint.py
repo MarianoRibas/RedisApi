@@ -11,3 +11,19 @@ def test_pop_endpoint_success(client, mocker):
     assert result.json['status'] == 'ok'
     assert result.json['message'] == 'Test-message-popped'
 
+def test_pop_endpoint_exception(client, mocker):
+    mocker.patch('apis.pop.pop_item', return_value = 'Connection error')
+    mocker.patch('apis.pop.verify_token_middleware', return_value = None )
+    
+    result = client.post('/api/queue/pop')
+    assert result.status_code == 500
+    assert result.json['message'] == 'Connection error'
+
+def test_pop_endpoint_unexpected_exception(client, mocker):
+    mocker.patch('apis.pop.pop_item', side_effect = Exception())
+    mocker.patch('apis.pop.verify_token_middleware', return_value = None )
+    
+    result = client.post('/api/queue/pop')
+    assert result.status_code == 500
+    assert result.json['message'] == 'Internal error'
+

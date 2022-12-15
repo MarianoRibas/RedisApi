@@ -9,5 +9,10 @@ def auth_middleware():
 
 @routes_health_check.route('/healthCheck', methods=['POST'])
 def health_check_route():
-    health = health_check()
-    return {'message' : health} , 200
+    try:
+        health = health_check()
+        if health == 'Connection error':
+            return {'message': health} , 500
+        return {'message' : health} , 200
+    except:
+        return {'message' : 'Internal error'} , 500

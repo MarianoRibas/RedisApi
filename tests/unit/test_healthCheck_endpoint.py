@@ -17,3 +17,11 @@ def test_healthCheck_endpoint_unhealthy(client, mocker):
     result = client.post('/api/queue/healthCheck')
     assert result.status_code == 200
     assert result.json['message'] == 'Redis database is unhealthy'
+
+def test_healthCheck_endpoint_exception(client, mocker):
+    mocker.patch('apis.healthCheck.health_check', return_value = 'Connection error')
+    mocker.patch('apis.healthCheck.verify_token_middleware', return_value = None )
+    
+    result = client.post('/api/queue/healthCheck')
+    assert result.status_code == 500
+    assert result.json['message'] == 'Connection error'

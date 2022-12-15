@@ -9,9 +9,14 @@ def auth_middleware():
 
 @routes_count.route('/count', methods=['POST'])
 def count_route():
-    queueCount = queue_count()
-    response = {
-            'status' : 'ok',
-            'count' : queueCount
-        }
-    return response , 200
+    try:
+        queueCount = queue_count()
+        if queueCount == 'Connection error':
+            return {'message' : queueCount} , 500
+        response = {
+                'status' : 'ok',
+                'count' : queueCount
+            }
+        return response , 200
+    except:
+        return {'message' : 'Internal error'} , 500

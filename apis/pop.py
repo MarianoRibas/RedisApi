@@ -16,14 +16,19 @@ def auth_middleware():
 
 @routes_pop.route("/pop", methods = ['POST'])
 def pop_route():
-    poppedItem = pop_item()
-    print(poppedItem)
-    if not poppedItem:
-        return 'No items to pop' , 400
+    try:
+        popResult = pop_item()
+        if not popResult:
+            return 'No items to pop' , 400
         
-    response = {
-        "status" : "ok",
-        "message" : poppedItem
-    }
+        if popResult == 'Connection error':
+            return {'message': popResult} , 500
 
-    return response, 200
+        response = {
+            "status" : "ok",
+            "message" : popResult
+        }
+
+        return response, 200
+    except:
+        return {'message' : 'Internal error'} , 500
