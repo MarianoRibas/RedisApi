@@ -1,5 +1,6 @@
 import pytest
 from app import create_app
+from pytest_mock import mocker
 
 @pytest.fixture()
 def test_client():

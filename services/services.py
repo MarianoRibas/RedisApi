@@ -37,7 +37,7 @@ def queue_count(r = r):
         queueCount = r.llen('queue:messages')
         return queueCount
     except:
-        'Connection error'
+        return 'Connection error'
 
 
 def health_check(r = r):
