@@ -12,7 +12,7 @@ def auth_middleware():
 def push_route():
     hasMsgKey = 'msg' in request.json
     if not hasMsgKey:
-        return 'Invalid Request' , 400
+        return {'status' : 'Must provide a message' }, 400
     message = str(request.json['msg'])
     result = push_item(message)
     if result:
