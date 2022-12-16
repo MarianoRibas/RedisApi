@@ -3,11 +3,13 @@ import jwt
 import os
 from dotenv import load_dotenv
 import datetime
+
 import redis
 
 r = redis.Redis(host='localhost', port=6379)
 
-
+def get_redis():
+    return r
 
 load_dotenv()
 secretKey = os.getenv("SECRETKEY")
@@ -15,18 +17,18 @@ validUsername = os.getenv("USERNAME")
 validPassword = os.getenv("PASSWORD")
 
 
-def push_item(item, r = r):
+def push_item(item):
     try:
-        result = r.rpush('queue:messages',str(item))
+        result = get_redis().rpush('queue:messages',str(item))
         return result
         
     except:
         return 'Connection error'
 
 
-def pop_item(r = r):
+def pop_item():
     try:
-        poppedItem = r.lpop('queue:messages')
+        poppedItem = get_redis().lpop('queue:messages')
         if poppedItem:
             return poppedItem.decode()
         return poppedItem
@@ -34,17 +36,17 @@ def pop_item(r = r):
         return 'Connection error'
 
 
-def queue_count(r = r):
+def queue_count():
     try:
-        queueCount = r.llen('queue:messages')
+        queueCount = get_redis().llen('queue:messages')
         return queueCount
     except:
         return 'Connection error'
 
 
-def health_check(r = r):
+def health_check():
     try:
-        health = r.ping()
+        health = get_redis().ping()
         if  not health:
             return 'Redis database is unhealthy'
         else:

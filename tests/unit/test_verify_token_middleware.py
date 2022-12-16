@@ -17,7 +17,7 @@ def test_verify_token_middleware_missing():
     headers = {}
     result = verify_token_middleware(headers)
     
-    assert  result[0] == 'Must Provide a Token!'
+    assert  result[0]['msg'] == 'Must Provide a Token!'
 
 
 def test_verify_token_middleware_invalid(mocker : MockerFixture):

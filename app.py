@@ -1,6 +1,6 @@
 from flask import Flask
 from apis import auth, count, push, pop, healthCheck
-
+import redis
 
 def create_app():
     app = Flask (__name__)
