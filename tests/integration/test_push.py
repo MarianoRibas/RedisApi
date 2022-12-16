@@ -4,7 +4,7 @@ import jwt
 from pytest_mock import mocker
 from conftest import client
 from dotenv import load_dotenv
-
+import fakeredis
 
 validUsername = os.getenv("USERNAME")
 validPassword = os.getenv("PASSWORD")

@@ -5,7 +5,7 @@ routes_count = Blueprint("routes_count",__name__)
 
 @routes_count.before_request
 def auth_middleware():
-    return verify_token_middleware()
+    return verify_token_middleware(request.headers)
 
 @routes_count.route('/count', methods=['POST'])
 def count_route():

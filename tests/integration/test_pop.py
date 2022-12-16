@@ -6,14 +6,13 @@ secretKey = os.getenv("SECRETKEY")
 validUsername = os.getenv("USERNAME")
 validPassword = os.getenv("PASSWORD")
 
-def test_pop(client):
+def test_pop_success(client):
     token = client.post('api/queue/login', json = {"user" : validUsername , "password" : validPassword})
     token = token.json['token']
 
-    #Request authentication
-    #test_authentication(client, 'pop')
+    #Request to add a message to the queue
+    client.post('/api/queue/push' , headers={"Authorization" : f"Bearer {token}"}, json={"msg" : "Test Message"})
 
-    #Request to pop a message from the queue
 
 
 
