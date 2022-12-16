@@ -11,5 +11,13 @@ def test_pop_endpoint_success(client, mocker):
     assert result.json['status'] == 'ok'
     assert result.json['message'] == 'Test-message-popped'
 
+def test_pop_endpoint_no_item(client, mocker):
+    mocker.patch('apis.pop.pop_item', return_value = None)
+    mocker.patch('apis.pop.verify_token_middleware', return_value = None )
+    
+    result = client.post('/api/queue/pop')
+    assert result.status_code == 200
+    assert result.json['message'] == 'No items to pop'
+
 
 

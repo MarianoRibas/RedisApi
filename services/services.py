@@ -27,9 +27,9 @@ def push_item(item, r = r):
 def pop_item(r = r):
     try:
         poppedItem = r.lpop('queue:messages')
-        #poppedItem.decode('utf-8')
-        print('popped----------------------',poppedItem)
-        return str(poppedItem)
+        if poppedItem:
+            return poppedItem.decode()
+        return poppedItem
     except:
         return 'Connection error'
 
@@ -100,6 +100,6 @@ def verify_token (token):
 def verify_token_middleware(headers):
     hasToken = 'Authorization' in headers
     if hasToken == False:
-        return 'Must Provide a Token!' , 401
+        return {'msg' : 'Must Provide a Token!'} , 401
     token = headers['Authorization'].split(" ")[1]
     return verify_token(token)
