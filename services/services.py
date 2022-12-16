@@ -88,11 +88,9 @@ def login (credentials):
 
 def verify_token (token):
     try:
-        # if output:
-        #     return jwt.decode(token,secretKey, algorithms=['HS256']) , 200
         jwt.decode(token,secretKey, algorithms=['HS256'])
     except jwt.DecodeError:
-        return "Invalid Token" , 401
+        return jsonify({"msg" : "Invalid Token"}) , 401
         
     except jwt.ExpiredSignatureError:
         return jsonify({"msg" : "Expired Token"}) , 401
