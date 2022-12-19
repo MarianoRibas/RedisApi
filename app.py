@@ -14,6 +14,6 @@ def create_app():
         app.register_blueprint(count.routes_count, url_prefix=URL_PREFIX)
         app.register_blueprint(healthCheck.routes_health_check, url_prefix=URL_PREFIX)
         if __name__ == '__main__':
-            app.run(debug=True)
+            app.run(host='0.0.0.0',debug=True)
 
         return app

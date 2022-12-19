@@ -6,7 +6,7 @@ import datetime
 
 import redis
 
-r = redis.Redis(host='localhost', port=6379)
+r = redis.Redis(host='redis', port=6379)
 
 def get_redis():
     return r
@@ -18,6 +18,7 @@ validPassword = os.getenv("PASSWORD")
 
 
 def push_item(item):
+    print('Docker-debug')
     try:
         result = get_redis().rpush('queue:messages',str(item))
         return result
