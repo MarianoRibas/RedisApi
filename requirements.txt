@@ -1,0 +1,4 @@
+flask
+redis
+PyJWT
+python-dotenv

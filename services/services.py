@@ -22,7 +22,8 @@ def push_item(item):
         result = get_redis().rpush('queue:messages',str(item))
         return result
         
-    except:
+    except Exception as error:
+        print(error)
         return 'Connection error'
 
 
